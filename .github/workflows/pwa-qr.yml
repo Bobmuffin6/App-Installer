@@ -1,0 +1,27 @@
+name: Generate PWA QR Code
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Your Cloudflare Worker URL'
+        required: true
+        default: 'https://basket-random.ghodges001.workers.dev'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate QR Code
+        run: |
+          npm install qrcode
+          # Generates a 600px QR code
+          npx qrcode "${{ github.event.inputs.url }}" --width 600 -o pwa-qr.png
+
+      - name: Upload QR Code
+        uses: actions/upload-artifact@v4
+        with:
+          name: pwa-qr-code
+          path: pwa-qr.png
