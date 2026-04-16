@@ -1,0 +1,14 @@
+jobs:
+  generate-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Generator
+        run: npm install -g appclipcode
+        
+      - name: Generate Code
+        run: npx appclipcode "https://polytrack.ghodges001.workers.dev" --index 0 -o code.svg
+
+      - name: Archive Code
+        uses: actions/upload-artifact@v4
+        with:
+          path: code.svg
