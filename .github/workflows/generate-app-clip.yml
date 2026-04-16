@@ -1,0 +1,33 @@
+name: Generate App Clip Code
+on:
+  # Allows you to run this manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'The URL for the App Clip'
+        required: true
+        default: 'https://polytrack.ghodges001.workers.dev/'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Generator
+        run: npm install -g appclipcode
+
+      - name: Generate SVG
+        run: npx appclipcode "${{ github.event.inputs.url }}" --index 0 -o appclip.svg
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-clip-qr-code
+          path: appclip.svg
